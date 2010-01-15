@@ -254,13 +254,13 @@ HEADER = [
 ]
 
 REPEAT = {
-	'Legs': [
+	'Legs': set([
 		'LegSymbol', 'LegCFICode', 'LegMaturityMonthYear', 'LegRatioQty',
 		'LegSide', 'LegRefID',
-	],
-	'MiscFees': [
+	]),
+	'MiscFees': set([
 		'MiscFeeAmt', 'MiscFeeCurr', 'MiscFeeType',
-	],
+	]),
 }
 
 SHOW = {
@@ -293,10 +293,16 @@ def tags(body, k, v):
 	if k not in REPEAT:
 		body.append(format(k, v))
 		return
-
+	
+	common = set(v[0]).intersection(*[set(grp) for grp in v[1:]])
+	if not common:
+		raise ValueError('no common value in groups')
+	start = sorted(common, key=lambda k: WTAGS[k][0])[0]
+	
 	body.append(format('No' + k, len(v)))
 	for grp in v:
-		for key in REPEAT[k]:
+		tags(body, start, grp[start])
+		for key in REPEAT[k] - set([start]):
 			if key in grp:
 				tags(body, key, grp[key])
 
@@ -352,13 +358,13 @@ def parse(msg):
 		elif v in RENUMS[k]:
 			v = RENUMS[k][v]
 		
-		if grp and k in cur: # next group
-			cur = {}
-			parent[-1][1].append(cur)
-		elif grp and k not in REPEAT[grp]: # end of current group range
+		if grp and k not in REPEAT[grp]: # end of current group range
 			parent.pop()
 			grp = parent[-1][0]
 			cur = parent[-1][1][-1]
+		if grp and k in cur: # next group
+			cur = {}
+			parent[-1][1].append(cur)
 		
 		cur[k] = v
 		if k == 'CheckSum':
