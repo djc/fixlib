@@ -12,6 +12,7 @@ class Engine(asyncore.dispatcher):
 		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.connect(host)
 		self.buffer = []
+		self.hooks = {}
 	
 	@property
 	def next(self):
@@ -23,13 +24,16 @@ class Engine(asyncore.dispatcher):
 	def handle_close(self):
 		self.close()
 	
+	def hook(self, hook, data):
+		for fun in self.hooks.get(hook, []):
+			fun(hook, data)
+	
 	def handle_read(self):
 		raw = self.recv(8192)
-		print 'recv', repr(raw)
+		self.hook('recv', raw)
 		msgs = fix42.parse(raw)
 		for msg in msgs:
-			print fix42.show(msg)
-			print ''
+			self.hook('proc', msg)
 			self.process(msg)
 	
 	def writable(self):
@@ -51,10 +55,9 @@ class Engine(asyncore.dispatcher):
 			msg['MsgSeqNum'] = self.next
 			self.store.save('out', msg)
 		
+		self.hook('write', msg)
 		raw = fix42.construct(msg)
-		print 'send', repr(raw)
-		print fix42.show(msg)
-		print ''
+		self.hook('send', raw)
 		self.buffer.append(raw)
 	
 	def resend(self, req):

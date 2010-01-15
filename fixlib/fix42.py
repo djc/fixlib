@@ -361,10 +361,3 @@ def parse(msg):
 	if not msgs[-1]:
 		msgs.pop(-1)	
 	return msgs
-
-def show(obj):
-	ls = ['{']
-	for k, v in obj.iteritems():
-		ls.append('  %r: %r,' % (k, v))
-	ls.append('}')
-	return '\n'.join(ls)
