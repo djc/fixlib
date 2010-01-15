@@ -3,39 +3,50 @@ from datetime import date, datetime
 import fix42
 import unittest
 
-class ConstructionTests(unittest.TestCase):
+class BasicTests(unittest.TestCase):
 	
 	def setUp(self):
-		fix42.REPEAT['Legs'].append('MiscFees')
+		fix42.REPEAT['Legs'].add('MiscFees')
 	
 	def tearDown(self):
 		fix42.REPEAT['Legs'].remove('MiscFees')
 	
+	def _parseclean(self, raw):
+		msg = fix42.parse(raw)[0]
+		msg.pop('BeginString')
+		msg.pop('BodyLength')
+		msg.pop('CheckSum')
+		return msg
+	
 	def testlogon(self):
-		raw = fix42.construct({
+		msg = {
 			'MsgType': 'Logon',
 			'HeartBtInt': 60,
 			'EncryptMethod': None,
-		})
+		}
+		raw = fix42.construct(msg)
 		v = '8=FIX.4.2\x019=17\x0135=A\x0198=0\x01108=60\x0110=001\x01'
 		self.assertEquals(raw, v)
+		self.assertEquals(msg, self._parseclean(raw))
 	
 	def testtypes(self):
-		raw = fix42.construct({
+		msg = {
 			'MsgType': 'Logon',
-			'ExecInst': ['1', '2', '3'],
+			'ExecInst': ['Not held', 'Work', 'Go along'],
 			'PossDupFlag': True,
 			'BeginSeqNo': 3,
 			'CumQty': 15.3,
 			'TradeDate': date(2010, 1, 15),
 			'SendingTime': datetime(2010, 1, 15, 11, 10, 33),
-		})
+		}
+		raw = fix42.construct(msg)
 		v = '8=FIX.4.2\x019=64\x0135=A\x0152=20100115-11:10:33\x0114=15.3' \
 			'\x017=3\x0143=Y\x0175=20100115\x0118=1 2 3\x0110=161\x01'
 		self.assertEquals(raw, v)
+		self.assertEquals(msg, self._parseclean(raw))
 	
 	def testgroups(self):
-		raw = fix42.construct({
+		msg = {
 			'MsgType': 'ExecutionReport',
 			'MiscFees': [
 				{
@@ -48,13 +59,15 @@ class ConstructionTests(unittest.TestCase):
 					'MiscFeeType': 'Tax',
 				},
 			],
-		})
+		}
+		raw = fix42.construct(msg)
 		v = '8=FIX.4.2\x019=55\x0135=8\x01136=2\x01137=3.4\x01138=EUR\x01' \
 			'139=7\x01137=1.2\x01138=USD\x01139=2\x0110=107\x01'
 		self.assertEquals(raw, v)
+		self.assertEquals(msg, self._parseclean(raw))
 
 	def testnestedgroups(self):
-		raw = fix42.construct({
+		msg = {
 			'MsgType': 'ExecutionReport',
 			'Legs': [
 				{
@@ -76,17 +89,13 @@ class ConstructionTests(unittest.TestCase):
 					'LegSymbol': 'B',
 				},
 			]
-		})
-		# This message is actually incorrect according to spec
-		# because the first group in 555 starts with 654, the second group
-		# should do the same. Not sure if this comes up in the real world.
+		}
+		raw = fix42.construct(msg)
 		v = '8=FIX.4.2\x019=86\x0135=8\x01555=2\x01654=alpha\x01136=2\x01' \
 			'137=3.4\x01138=EUR\x01139=7\x01137=1.2\x01138=USD\x01139=2\x01' \
-			'600=B\x01654=beta\x0110=240\x01'
+			'654=beta\x01600=B\x0110=240\x01'
 		self.assertEquals(raw, v)
-
-def suite():
-	return [BasicTests]
+		self.assertEquals(msg, self._parseclean(raw))
 
 if __name__ == '__main__':
 	unittest.main()
