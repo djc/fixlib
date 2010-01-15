@@ -269,7 +269,7 @@ SHOW = {
 	int: (lambda x: str(x)),
 	float: (lambda x: str(x)),
 	long: (lambda x: str(x)),
-	datetime: (lambda x: x.strftime(DATEFMT)),
+	datetime: (lambda x: x.strftime(DATETIMEFMT)),
 }
 
 def nojson(k):
