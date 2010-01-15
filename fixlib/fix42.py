@@ -269,6 +269,8 @@ SHOW = {
 	int: (lambda x: str(x)),
 	float: (lambda x: str(x)),
 	long: (lambda x: str(x)),
+	date: (lambda x: x.strftime(DATEFMT)),
+	list: (lambda x: ' '.join(x)),
 	datetime: (lambda x: x.strftime(DATETIMEFMT)),
 }
 
@@ -276,8 +278,13 @@ def nojson(k):
 	return WTAGS[k][1] in (dtdecode, ddecode)
 
 def format(k, v):
+	
 	if k in WENUMS:
-		v = WENUMS[k][v]
+		if isinstance(v, list):
+			v = [WENUMS[k].get(i, i) for i in v]
+		else:
+			v = WENUMS[k][v]
+	
 	v = SHOW[type(v)](v)
 	return '%i=%s' % (WTAGS[k][0], v)
 
