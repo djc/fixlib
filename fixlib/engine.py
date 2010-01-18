@@ -7,6 +7,7 @@ class Engine(asyncore.dispatcher):
 	
 	def __init__(self, host, parties, store):
 		asyncore.dispatcher.__init__(self)
+		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.host = host
 		self.parties = parties
 		self.store = store
@@ -14,7 +15,6 @@ class Engine(asyncore.dispatcher):
 		self.hooks = {}
 	
 	def connect(self):
-		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
 		asyncore.dispatcher.connect(self, self.host)
 	
 	@property
