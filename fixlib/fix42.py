@@ -206,6 +206,7 @@ RTAGS = {
 	137: ('MiscFeeAmt', float),
 	138: ('MiscFeeCurr', str),
 	139: ('MiscFeeType', str),
+	141: ('ResetSeqNumFlag', bool),
 	150: ('ExecType', str),
 	151: ('LeavesQty', float),
 	167: ('SecurityType', str),
