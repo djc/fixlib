@@ -59,8 +59,8 @@ class Engine(asyncore.dispatcher):
 		for i in range(start, end + 1):
 			
 			msg = self.store.get('out', i)
-			if msg['MsgType'] in fix42.IGNORE:
-				fill = msg['MsgSeqNum']
+			if msg is None or msg['MsgType'] in fix42.IGNORE:
+				fill = i
 				continue
 			
 			if fill is not None:
