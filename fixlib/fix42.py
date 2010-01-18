@@ -10,7 +10,7 @@ CSMASK = 255
 
 ADMIN = set([
 	'Logon', 'Logout', 'Resend Request', 'HeartBeat', 'Test Request',
-	'SeqReset-Reset', 'SeqReset-GapFill', 'Reject',
+	'Sequence Reset', 'Reject',
 ])
 
 IGNORE = ADMIN - set(['Reject'])
