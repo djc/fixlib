@@ -1,6 +1,19 @@
+from datetime import datetime, date
+
 import fix42
 import couchdb
 import copy
+
+def ddecode(s):
+	return datetime.strptime(s, '%Y-%m-%d %H:%M:%S').date()
+
+def dtdecode(s):
+	return datetime.strptime(s.split('.', 1)[0], '%Y-%m-%d %H:%M:%S')
+
+TYPES = {
+	date: (str, ddecode),
+	datetime: (str, dtdecode),
+}
 
 class Store(object):
 	
@@ -22,12 +35,36 @@ class Store(object):
 	def _encode(self, msg):
 		msg = copy.copy(msg)
 		for k, v in msg.iteritems():
-			if fix42.nojson(k):
-				msg[k] = str(v)
+			
+			if k in fix42.REPEAT:
+				msg[k] = [self._encode(i) for i in v]
+			
+			codec = TYPES.get(fix42.WTAGS[k][1])
+			if codec is not None:
+				msg[k] = codec[0](v)
+			
 		return msg
 	
+	def _decode(self, msg):
+		new = {}
+		for k, v in msg.iteritems():
+			
+			if k.startswith('_'):
+				continue
+			
+			if k in fix42.REPEAT:
+				msg[k] = [self._decode(i) for i in v]
+			
+			codec = TYPES.get(fix42.WTAGS[k][1])
+			new[k] = v
+			if codec is not None:
+				new[k] = codec[1](v)
+		
+		return new
+	
 	def get(self, dir, seq):
-		return self.db.get('%s-%s' % (dir, seq))
+		msg = self.db.get('%s-%s' % (dir, seq))
+		return msg if msg is None else self._decode(msg)
 	
 	def save(self, dir, msg):
 		
