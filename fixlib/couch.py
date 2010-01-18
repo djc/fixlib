@@ -63,8 +63,12 @@ class Store(object):
 		return new
 	
 	def get(self, dir, seq):
-		opts = {'startkey': [seq, 'z'], 'endkey': [seq], 'descending': True}
-		opts['limit'] = 1
+		opts = {
+			'startkey': [seq, 'z'],
+			'endkey': [seq],
+			'descending': True,
+			'limit': 1,
+		}
 		cur = self.db.view('seq/%s' % dir, **opts)
 		msg = cur.rows[0].value if cur.rows else None
 		return msg if msg is None else self._decode(msg)
