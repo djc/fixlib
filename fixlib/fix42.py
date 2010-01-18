@@ -3,8 +3,6 @@ from datetime import datetime, date
 import copy
 
 SOH = '\x01'
-DATEFMT = '%Y%m%d'
-DATETIMEFMT = '%Y%m%d-%H:%M:%S'
 PROTO = 'FIX.4.2'
 CSMASK = 255
 
@@ -152,18 +150,6 @@ for tag, vals in WENUMS.iteritems():
 	for k, v in vals.iteritems():
 		cur[v] = k
 
-def booldecode(x):
-	return {'Y': True, 'N': False}[x]
-
-def ddecode(d):
-	return datetime.strptime(d, DATEFMT).date()
-
-def dtdecode(dt):
-	return datetime.strptime(dt, DATETIMEFMT)
-
-def multi(s):
-	return s.split(' ')
-
 RTAGS = {
 	1: ('Account', str),
 	6: ('AvgPx', float),
@@ -176,7 +162,7 @@ RTAGS = {
 	15: ('Currency', str),
 	16: ('EndSeqNo', int),
 	17: ('ExecID', str),
-	18: ('ExecInst', multi),
+	18: ('ExecInst', list),
 	19: ('ExecRefID', str),
 	20: ('ExecTransType', str),
 	21: ('HandlInst', str),
@@ -191,18 +177,18 @@ RTAGS = {
 	39: ('OrdStatus', str),
 	40: ('OrdType', str),
 	41: ('OrigClOrdID', str),
-	43: ('PossDupFlag', booldecode),
+	43: ('PossDupFlag', bool),
 	44: ('Price', float),
 	49: ('SenderCompID', str),
 	50: ('SenderSubID', str),
-	52: ('SendingTime', dtdecode),
+	52: ('SendingTime', datetime),
 	54: ('Side', str),
 	55: ('Symbol', str),
 	56: ('TargetCompID', str),
 	58: ('Text', str),
 	59: ('TimeInForce', str),
-	60: ('TransactTime', dtdecode),
-	75: ('TradeDate', ddecode),
+	60: ('TransactTime', datetime),
+	75: ('TradeDate', date),
 	76: ('ExecBroker', str),
 	77: ('OpenClose', str),
 	98: ('EncryptMethod', int),
@@ -213,9 +199,9 @@ RTAGS = {
 	109: ('ClientID', str),
 	111: ('MaxFloor', float),
 	112: ('TestReqID', str),
-	122: ('OrigSendingTime', dtdecode),
-	123: ('GapFillFlag', booldecode),
-	126: ('ExpireTime', dtdecode),
+	122: ('OrigSendingTime', datetime),
+	123: ('GapFillFlag', bool),
+	126: ('ExpireTime', datetime),
 	136: ('NoMiscFees', int),
 	137: ('MiscFeeAmt', float),
 	138: ('MiscFeeCurr', str),
@@ -249,6 +235,39 @@ RTAGS = {
 
 WTAGS = dict((v[0], (k, v[1])) for (k, v) in RTAGS.iteritems())
 
+def booldecode(x):
+	return {'Y': True, 'N': False}[x]
+
+def boolencode(x):
+	return {True: 'Y', False: 'N'}[x]
+
+DATEFMT = '%Y%m%d'
+
+def dencode(d):
+	return d.strftime(DATEFMT)
+
+def ddecode(d):
+	return datetime.strptime(d, DATEFMT).date()
+
+DATETIMEFMT = '%Y%m%d-%H:%M:%S'
+
+def dtencode(dt):
+	return dt.strftime(DATETIMEFMT)
+
+def dtdecode(dt):
+	return datetime.strptime(dt, DATETIMEFMT)
+
+TYPES = {
+	bool: (boolencode, booldecode),
+	str: (str, str),
+	int: (str, int),
+	float: (str, float),
+	long: (str, int),
+	date: (dencode, ddecode),
+	datetime: (dtencode, dtdecode),
+	list: (lambda x: ' '.join(x), lambda x: x.split(' ')),
+}
+
 HEADER = [
 	'SenderCompID', 'TargetCompID', 'MsgSeqNum', 'SendingTime',
 ]
@@ -263,17 +282,6 @@ REPEAT = {
 	]),
 }
 
-SHOW = {
-	bool: (lambda x: {True: 'Y', False: 'N'}[x]),
-	str: (lambda x: x),
-	int: (lambda x: str(x)),
-	float: (lambda x: str(x)),
-	long: (lambda x: str(x)),
-	date: (lambda x: x.strftime(DATEFMT)),
-	list: (lambda x: ' '.join(x)),
-	datetime: (lambda x: x.strftime(DATETIMEFMT)),
-}
-
 def nojson(k):
 	return WTAGS[k][1] in (dtdecode, ddecode)
 
@@ -285,7 +293,7 @@ def format(k, v):
 		else:
 			v = WENUMS[k][v]
 	
-	v = SHOW[type(v)](v)
+	v = TYPES[type(v)][0](v)
 	return '%i=%s' % (WTAGS[k][0], v)
 
 def tags(body, k, v):
@@ -342,8 +350,8 @@ def parse(msg):
 		if int(k) not in RTAGS:
 			raise ValueError(int(k))
 		
-		k, decode = RTAGS[int(k)]
-		v = decode(v)
+		k, type = RTAGS[int(k)]
+		v = TYPES[type][1](v)
 		if k.startswith('No') and k[2:] in REPEAT and v:
 			grp = k[2:]
 			parent.append((grp, [{}]))
