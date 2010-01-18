@@ -77,7 +77,7 @@ class Engine(asyncore.dispatcher):
 				self.queue({
 					'MsgType': 'Sequence Reset',
 					'GapFillFlag': True,
-					'NewSeqNo': fill,
+					'NewSeqNo': fill + 1,
 				})
 				fill = None
 			
@@ -90,7 +90,7 @@ class Engine(asyncore.dispatcher):
 			self.queue({
 				'MsgType': 'Sequence Reset',
 				'GapFillFlag': True,
-				'NewSeqNo': fill,
+				'NewSeqNo': fill + 1,
 			})
 	
 	def process(self, msg):
