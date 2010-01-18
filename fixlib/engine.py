@@ -40,10 +40,12 @@ class Engine(asyncore.dispatcher):
 	def queue(self, msg):
 		
 		if 'MsgSeqNum' not in msg:
+			msg['MsgSeqNum'] = self.next
+		
+		if 'SendingTime' not in msg:
 			msg['SendingTime'] = datetime.utcnow()
 			msg['SenderCompID'] = self.parties[0]
 			msg['TargetCompID'] = self.parties[1]
-			msg['MsgSeqNum'] = self.next
 			self.store.save('out', msg)
 		
 		self.hook('write', msg)
@@ -53,7 +55,7 @@ class Engine(asyncore.dispatcher):
 	
 	def resend(self, req):
 		start, end = req['BeginSeqNo'], req['EndSeqNo']
-		fill = None
+		fill, cur = None, start
 		for i in range(start, end + 1):
 			
 			msg = self.store.get('out', i)
@@ -64,6 +66,7 @@ class Engine(asyncore.dispatcher):
 			if fill is not None:
 				self.queue({
 					'MsgType': 'Sequence Reset',
+					'MsgSeqNum': cur,
 					'GapFillFlag': True,
 					'NewSeqNo': fill + 1,
 				})
@@ -73,10 +76,12 @@ class Engine(asyncore.dispatcher):
 			msg.pop('_rev')
 			msg['PossDupFlag'] = True
 			self.queue(msg)
+			cur += 1
 		
 		if fill is not None:
 			self.queue({
 				'MsgType': 'Sequence Reset',
+				'MsgSeqNum': cur,
 				'GapFillFlag': True,
 				'NewSeqNo': fill + 1,
 			})
