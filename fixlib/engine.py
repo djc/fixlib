@@ -5,18 +5,6 @@ import socket, asyncore
 
 class Engine(asyncore.dispatcher):
 	
-	def __init__(self, host, parties, store):
-		asyncore.dispatcher.__init__(self)
-		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.host = host
-		self.parties = parties
-		self.store = store
-		self.buffer = []
-		self.hooks = {}
-	
-	def connect(self):
-		asyncore.dispatcher.connect(self, self.host)
-	
 	@property
 	def next(self):
 		return self.store.last[1] + 1
@@ -92,7 +80,7 @@ class Engine(asyncore.dispatcher):
 				'GapFillFlag': True,
 				'NewSeqNo': fill + 1,
 			})
-	
+
 	def process(self, msg):
 		if msg['MsgSeqNum'] > self.store.last[0] + 1:
 			rsp = {'MsgType': 'Resend Request', 'EndSeqNo': 0}
@@ -107,3 +95,18 @@ class Engine(asyncore.dispatcher):
 			self.queue({'MsgType': 'HeartBeat'})
 		elif msg['MsgType'] == 'Resend Request':
 			self.resend(msg)
+
+
+class Initiator(Engine):
+	
+	def __init__(self, host, parties, store):
+		asyncore.dispatcher.__init__(self)
+		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.host = host
+		self.parties = parties
+		self.store = store
+		self.buffer = []
+		self.hooks = {}
+	
+	def connect(self):
+		asyncore.dispatcher.connect(self, self.host)
