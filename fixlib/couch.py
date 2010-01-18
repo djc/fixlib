@@ -8,11 +8,11 @@ def ddecode(s):
 	return datetime.strptime(s, '%Y-%m-%d %H:%M:%S').date()
 
 def dtdecode(s):
-	return datetime.strptime(s.split('.', 1)[0], '%Y-%m-%d %H:%M:%S')
+	return datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
 
 TYPES = {
 	date: (str, ddecode),
-	datetime: (str, dtdecode),
+	datetime: (lambda s: str(s)[:19], dtdecode),
 }
 
 class Store(object):
