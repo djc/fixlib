@@ -24,7 +24,8 @@ class Engine(asyncore.dispatcher):
 		self.hook('recv', raw)
 		msgs = fix42.parse(raw)
 		for msg in msgs:
-			self.hook('proc', msg)
+			type = 'admin' if msg['MsgType'] in fix42.ADMIN else 'app'
+			self.hook(type, msg)
 			self.process(msg)
 	
 	def writable(self):
