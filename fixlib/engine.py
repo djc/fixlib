@@ -101,17 +101,11 @@ class Engine(asyncore.dispatcher):
 		elif msg['MsgType'] == 'Resend Request':
 			self.resend(msg)
 
-
 class Initiator(Engine):
 	
-	def __init__(self, host, parties, store):
-		asyncore.dispatcher.__init__(self)
-		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.host = host
+	def __init__(self, sock, parties, store):
+		asyncore.dispatcher.__init__(self, sock)
 		self.parties = parties
 		self.store = store
 		self.buffer = []
 		self.hooks = {}
-	
-	def connect(self):
-		asyncore.dispatcher.connect(self, self.host)
