@@ -32,6 +32,16 @@ class Store(object):
 		self._last = [inc, out]
 		return self._last
 	
+	def clear(self):
+		docs = []
+		for row in self.db.view('_all_docs'):
+			if row.key.startswith('_design/'):
+				continue
+			doc = self.db[row.key]
+			doc.update({'_deleted': True, '_id': row.key})
+			docs.append(doc)
+		self.db.update(docs)
+	
 	def _encode(self, msg):
 		msg = copy.copy(msg)
 		for k, v in msg.iteritems():
