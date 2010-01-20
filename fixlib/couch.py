@@ -19,11 +19,11 @@ class Store(object):
 	
 	def __init__(self, *args):
 		self.db = couchdb.Server(args[0])[args[1]]
-		self._last = None
+		self._last = [0, 0]
 	
 	@property
 	def last(self):
-		if self._last is not None:
+		if self._last != [0, 0]:
 			return self._last
 		cur = self.db.view('time/in', descending=True, limit=1)
 		inc = cur.rows[0].value['MsgSeqNum'] if cur.rows else 0
