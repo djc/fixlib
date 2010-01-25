@@ -141,7 +141,16 @@ WENUMS = {
 		'Repricing of order': 3,
 		'Broker option': 4,
 		'Partial decline of OrderQty': 5,
-	}
+	},
+	'TimeInForce': {
+		'0': 'Day',
+		'1': 'GTC',
+		'2': 'OPG',
+		'3': 'IOC',
+		'4': 'FOK',
+		'5': 'GTX',
+		'6': 'GTD',
+	},
 }
 
 RENUMS = {}
