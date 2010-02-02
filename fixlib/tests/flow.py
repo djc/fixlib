@@ -35,7 +35,7 @@ class EngineTests(unittest.TestCase):
 		
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		sock.connect(('127.0.0.1', TEST_PORT))
-		i = engine.Initiator(sock, ('A', 'B'), MemoryStore())
+		i = engine.Initiator(sock, MemoryStore(), ('A', 'B'))
 		
 		return i, a
 	

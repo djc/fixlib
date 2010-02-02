@@ -101,7 +101,7 @@ class Engine(asyncore.dispatcher):
 
 class Initiator(Engine):
 	
-	def __init__(self, sock, parties, store):
+	def __init__(self, sock, store, parties):
 		asyncore.dispatcher.__init__(self, sock)
 		self.parties = parties
 		self.store = store
