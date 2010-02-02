@@ -9,9 +9,6 @@ class Engine(asyncore.dispatcher):
 	def next(self):
 		return self.store.last[1] + 1
 	
-	def handle_connect(self):
-		pass
-	
 	def handle_close(self):
 		self.close()
 	
@@ -109,4 +106,35 @@ class Initiator(Engine):
 		self.parties = parties
 		self.store = store
 		self.buffer = []
+
+class AcceptorServer(asyncore.dispatcher):
+	
+	def __init__(self, sock, store):
+		asyncore.dispatcher.__init__(self, sock)
+		self.store = store
 		self.hooks = {}
+	
+	def handle_accept(self):
+		client = self.accept()
+		a = Acceptor(client[0], self.store)
+		a.hooks = self.hooks
+
+class Acceptor(Engine):
+	
+	def __init__(self, sock, store):
+		asyncore.dispatcher.__init__(self, sock)
+		self.store = store
+		self.buffer = []
+		self.hooks = {}
+		self.parties = None
+	
+	def process(self, msg):
+		print 'received', msg
+		if msg['MsgType'] == 'Logon':
+			self.parties = msg['TargetCompID'], msg['SenderCompID']
+			self.queue({
+				'MsgType': 'Logon',
+				'HeartBtInt': msg['HeartBtInt'],
+				'EncryptMethod': msg['EncryptMethod'],
+			})
+		Engine.process(self, msg)
