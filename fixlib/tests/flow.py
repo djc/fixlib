@@ -39,18 +39,22 @@ class EngineTests(unittest.TestCase):
 		
 		return i, a
 	
-	def loop(self, i, a, icond=None, acond=None):
+	def loop(self, i, a, icond=None, acond=None, reset=False):
 		
 		if icond is not None:
 			i.hooks = {'app': [icond], 'admin': [icond]}
 		if acond is not None:
 			a.hooks = {'app': [acond], 'admin': [acond]}
 		
-		i.queue({
+		req = {
 			'MsgType': 'Logon',
 			'HeartBtInt': 5,
 			'EncryptMethod': None,
-		})
+		}
+		if reset:
+			req.update({'ResetSeqNumFlag': True, 'MsgSeqNum': 1})
+		
+		i.queue(req)
 		asyncore.loop()
 	
 	def testlogon(self):
@@ -62,6 +66,17 @@ class EngineTests(unittest.TestCase):
 				a.close()
 				i.close()
 		self.loop(i, a, cond, None)
-
+	
+	def testreset(self):
+		i, a = self.setup()
+		def cond(hook, msg):
+			if hook == 'admin' and msg['MsgType'] == 'Logon':
+				self.assertEquals(msg.get('ResetSeqNumFlag'), True)
+				self.assertEquals(msg['MsgSeqNum'], 1)
+				a.close()
+				i.close()
+		self.loop(i, a, cond, None, True)
+	
+	
 if __name__ == '__main__':
 	unittest.main()

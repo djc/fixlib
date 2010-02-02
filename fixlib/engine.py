@@ -131,9 +131,12 @@ class Acceptor(Engine):
 	def process(self, msg):
 		if msg['MsgType'] == 'Logon':
 			self.parties = msg['TargetCompID'], msg['SenderCompID']
-			self.queue({
+			rsp = {
 				'MsgType': 'Logon',
 				'HeartBtInt': msg['HeartBtInt'],
 				'EncryptMethod': msg['EncryptMethod'],
-			})
+			}
+			if msg.get('ResetSeqNumFlag'):
+				rsp.update({'ResetSeqNumFlag': True})
+			self.queue(rsp)
 		Engine.process(self, msg)
