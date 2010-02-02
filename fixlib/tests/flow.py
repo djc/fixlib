@@ -46,15 +46,7 @@ class EngineTests(unittest.TestCase):
 		if acond is not None:
 			a.hooks = {'app': [acond], 'admin': [acond]}
 		
-		req = {
-			'MsgType': 'Logon',
-			'HeartBtInt': 5,
-			'EncryptMethod': None,
-		}
-		if reset:
-			req.update({'ResetSeqNumFlag': True, 'MsgSeqNum': 1})
-		
-		i.queue(req)
+		i.logon(5, None, reset)
 		asyncore.loop()
 	
 	def testlogon(self):

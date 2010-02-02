@@ -106,6 +106,12 @@ class Initiator(Engine):
 		self.parties = parties
 		self.store = store
 		self.buffer = []
+	
+	def logon(self, hbi, em, reset=False):
+		req = {'MsgType': 'Logon', 'HeartBtInt': hbi, 'EncryptMethod': em}
+		if reset:
+			req.update({'ResetSeqNumFlag': True, 'MsgSeqNum': 1})
+		self.queue(req)
 
 class AcceptorServer(asyncore.dispatcher):
 	
