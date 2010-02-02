@@ -129,7 +129,6 @@ class Acceptor(Engine):
 		self.parties = None
 	
 	def process(self, msg):
-		print 'received', msg
 		if msg['MsgType'] == 'Logon':
 			self.parties = msg['TargetCompID'], msg['SenderCompID']
 			self.queue({
