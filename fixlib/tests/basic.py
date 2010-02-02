@@ -97,5 +97,10 @@ class BasicTests(unittest.TestCase):
 		self.assertEquals(raw, v)
 		self.assertEquals(msg, self._parseclean(raw))
 
+def suite():
+	suite = unittest.TestSuite()
+	suite.addTest(unittest.makeSuite(BasicTests, 'test'))
+	return suite
+
 if __name__ == '__main__':
-	unittest.main()
+	unittest.main(defaultTest='suite')

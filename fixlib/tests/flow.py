@@ -68,7 +68,11 @@ class EngineTests(unittest.TestCase):
 				a.close()
 				i.close()
 		self.loop(i, a, cond, None, True)
-	
+
+def suite():
+	suite = unittest.TestSuite()
+	suite.addTest(unittest.makeSuite(EngineTests, 'test'))
+	return suite
 	
 if __name__ == '__main__':
-	unittest.main()
+	unittest.main(defaultTest='suite')
