@@ -1,0 +1,25 @@
+
+fixlib
+======
+
+fixlib provides a Pythonic interface to build FIX engines. FIX messages
+(currently, only version 4.2 of the protocol is supported) are converted
+to very readable Python dictionaries. An abstract store interface is used
+to store messages and thereby provide the resend facilities required by the
+protocol. An example store based on CouchDB and couchdb-python is provided.
+fixlib uses the asyncore module from the standard library to efficiently
+handle network communication.
+
+
+Requirements
+============
+
+ - setuptools (for easy running of tests)
+ - python (tested on 2.6 only so far, should run on 2.5)
+ - couchdb-python (if using the CouchDB store)
+
+
+Further information
+===================
+
+fixlib is hosted on bitbucket.org. Bugs can be reported there.
