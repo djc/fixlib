@@ -1,6 +1,6 @@
 from datetime import date, datetime
+from fixlib import fix42
 
-import fix42
 import unittest
 
 class BasicTests(unittest.TestCase):

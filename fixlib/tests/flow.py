@@ -1,6 +1,6 @@
 from datetime import date, datetime
+from fixlib import engine
 
-import engine
 import unittest, asyncore, socket
 
 TEST_PORT = 32349
