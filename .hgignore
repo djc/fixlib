@@ -1,5 +1,3 @@
 syntax: glob
 **.pyc
-*.pem
-log-*.txt
-*.log
+*.egg-info
