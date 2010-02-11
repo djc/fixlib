@@ -7,7 +7,7 @@
 from datetime import datetime
 
 import fix42
-import socket, asyncore
+import asyncore
 
 class Engine(asyncore.dispatcher):
 	
