@@ -1,3 +1,9 @@
+# Copyright (C) 2010 KenTyde BV
+# All rights reserved.
+#
+# This software is licensed as described in the file LICENSE,
+# which you should have described as part of this distribution.
+
 from datetime import date, datetime
 from fixlib import fix42
 
