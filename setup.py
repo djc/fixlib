@@ -20,7 +20,7 @@ setup(
 	author='Dirkjan Ochtman',
 	author_email='djc.ochtman@kentyde.com',
 	license='BSD',
-	url='http://bitbucket.org/kentyde/fixlib',
+	url='http://source.kentyde.com/fixlib',
 	classifiers=[
 		'Development Status :: 4 - Beta',
 		'Intended Audience :: Financial and Insurance Industry',
