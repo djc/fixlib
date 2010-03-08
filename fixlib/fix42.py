@@ -114,6 +114,7 @@ WENUMS = {
 	},
 	'HandlInst': {
 		'auto-private': '1',
+		'auto-public': '2',
 		'manual': '3',
 	},
 	'MultiLegReportingType': {
