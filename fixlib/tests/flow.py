@@ -4,11 +4,12 @@
 # This software is licensed as described in the file LICENSE,
 # which you should have described as part of this distribution.
 
-from fixlib import engine
+from fixlib import engine, channel
 
-import unittest, asyncore, socket
+import unittest, asyncore, socket, json
 
 TEST_PORT = 32349
+CHANNEL_PORT = 20111
 
 class MemoryStore(object):
 
@@ -31,7 +32,7 @@ class MemoryStore(object):
 
 class EngineTests(unittest.TestCase):
 	
-	def setup(self):
+	def setup(self, chan=False):
 		
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		sock.bind(('', TEST_PORT))
@@ -42,7 +43,15 @@ class EngineTests(unittest.TestCase):
 		sock.connect(('127.0.0.1', TEST_PORT))
 		i = engine.Initiator(sock, MemoryStore(), ('A', 'B'))
 		
-		return i, a
+		if not chan:
+			return i, a
+		
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		sock.bind(('', CHANNEL_PORT))
+		c = channel.ChannelServer(sock, i)
+		c.listen(1)
+		
+		return i, a, c
 	
 	def loop(self, i, a, icond=None, acond=None, reset=False):
 		
@@ -73,6 +82,23 @@ class EngineTests(unittest.TestCase):
 				a.close()
 				i.close()
 		self.loop(i, a, cond, None, True)
+	
+	def testchannel(self):
+		
+		i, a, c = self.setup(True)
+		def icond(hook, msg):
+			if hook == 'admin' and msg['MsgType'] == 'Logon':
+				sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				sock.connect(('127.0.0.1', CHANNEL_PORT))
+				sock.send(json.dumps({'MsgType': 'NewOrderSingle'}))
+		
+		def acond(hook, msg):
+			if hook == 'app' and msg['MsgType'] == 'NewOrderSingle':
+				a.close()
+				i.close()
+				c.close()
+		
+		self.loop(i, a, icond, acond, False)
 
 def suite():
 	suite = unittest.TestSuite()
