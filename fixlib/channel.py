@@ -12,7 +12,6 @@ class ChannelServer(asyncore.dispatcher):
 	def __init__(self, sock, dest):
 		asyncore.dispatcher.__init__(self, sock)
 		self.dest = dest
-		self.buffer = deque
 	
 	def handle_accept(self):
 		client = self.accept()
@@ -24,6 +23,7 @@ class SideChannel(asyncore.dispatcher):
 	def __init__(self, sock, dest):
 		asyncore.dispatcher.__init__(self, sock)
 		self.dest = dest
+		self.buffer = None
 	
 	def handle_close(self):
 		self.close()
@@ -33,6 +33,11 @@ class SideChannel(asyncore.dispatcher):
 		if raw:
 			msg = json.loads(raw)
 			self.dest.queue(msg)
+			self.buffer = {'result': 'done'}
 	
 	def writable(self):
-		return False
+		return self.buffer
+	
+	def handle_write(self):
+		self.send(json.dumps(self.buffer))
+		self.close()

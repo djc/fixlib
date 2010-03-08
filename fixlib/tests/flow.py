@@ -86,9 +86,10 @@ class EngineTests(unittest.TestCase):
 	def testchannel(self):
 		
 		i, a, c = self.setup(True)
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 		def icond(hook, msg):
 			if hook == 'admin' and msg['MsgType'] == 'Logon':
-				sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				sock.connect(('127.0.0.1', CHANNEL_PORT))
 				sock.send(json.dumps({'MsgType': 'NewOrderSingle'}))
 		
@@ -99,6 +100,7 @@ class EngineTests(unittest.TestCase):
 				c.close()
 		
 		self.loop(i, a, icond, acond, False)
+		self.assertEqual(json.loads(sock.recv(8192)), {'result': 'done'})
 
 def suite():
 	suite = unittest.TestSuite()
