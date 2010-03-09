@@ -158,6 +158,9 @@ WENUMS = {
 		'5': 'GTX',
 		'6': 'GTD',
 	},
+	'TargetStrategy': {
+		'Calendar Spread': '1000',
+	}
 }
 
 RENUMS = {}
