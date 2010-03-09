@@ -6,7 +6,7 @@
 
 from datetime import datetime, date
 
-import fix42
+import fix42, util
 import couchdb
 import copy
 
@@ -48,36 +48,6 @@ class Store(object):
 			docs.append(doc)
 		self.db.update(docs)
 	
-	def _encode(self, msg):
-		msg = copy.copy(msg)
-		for k, v in msg.iteritems():
-			
-			if k in fix42.REPEAT:
-				msg[k] = [self._encode(i) for i in v]
-			
-			codec = TYPES.get(fix42.WTAGS[k][1])
-			if codec is not None:
-				msg[k] = codec[0](v)
-			
-		return msg
-	
-	def _decode(self, msg):
-		new = {}
-		for k, v in msg.iteritems():
-			
-			if k.startswith('_'):
-				continue
-			
-			if k in fix42.REPEAT:
-				msg[k] = [self._decode(i) for i in v]
-			
-			codec = TYPES.get(fix42.WTAGS[k][1])
-			new[k] = v
-			if codec is not None:
-				new[k] = codec[1](v)
-		
-		return new
-	
 	def get(self, dir, seq):
 		opts = {
 			'startkey': [seq, 'z'],
@@ -87,10 +57,10 @@ class Store(object):
 		}
 		cur = self.db.view('seq/%s' % dir, **opts)
 		msg = cur.rows[0].value if cur.rows else None
-		return msg if msg is None else self._decode(msg)
+		return msg if msg is None else util.json_decode(msg)
 	
 	def save(self, dir, msg):
-		msg = self._encode(msg)
+		msg = util.json_encode(msg)
 		lkey = {'in': 0, 'out': 1}[dir]
 		if self._last[lkey] < msg['MsgSeqNum']:
 			self._last[lkey] = msg['MsgSeqNum']

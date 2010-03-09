@@ -5,7 +5,7 @@
 # which you should have described as part of this distribution.
 
 from datetime import date, datetime
-from fixlib import fix42
+from fixlib import fix42, util
 
 import unittest
 
@@ -13,9 +13,11 @@ class BasicTests(unittest.TestCase):
 	
 	def setUp(self):
 		fix42.REPEAT['Legs'].add('MiscFees')
+		fix42.REPEAT['Legs'].add('TransactTime')
 	
 	def tearDown(self):
 		fix42.REPEAT['Legs'].remove('MiscFees')
+		fix42.REPEAT['Legs'].remove('TransactTime')
 	
 	def _parseclean(self, raw):
 		msg = fix42.parse(raw)[0]
@@ -102,7 +104,24 @@ class BasicTests(unittest.TestCase):
 			'654=beta\x01600=B\x0110=240\x01'
 		self.assertEquals(raw, v)
 		self.assertEquals(msg, self._parseclean(raw))
-
+	
+	def testjson(self):
+		dt = datetime(2010, 3, 9, 12, 45, 43)
+		msg = {
+			'MsgType': 'ExecutionReport',
+			'Legs': [
+				{
+					'TransactTime': dt,
+				}
+			],
+			'SendingTime': dt,
+		}
+		x = util.json_encode(msg)
+		self.assertEquals(x['SendingTime'], '2010-03-09 12:45:43')
+		self.assertEquals(x['Legs'][0]['TransactTime'], '2010-03-09 12:45:43')
+		self.assertEquals(util.json_decode(x), msg)
+		
+	
 def suite():
 	suite = unittest.TestSuite()
 	suite.addTest(unittest.makeSuite(BasicTests, 'test'))
