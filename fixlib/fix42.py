@@ -309,13 +309,13 @@ HEADER = [
 ]
 
 REPEAT = {
-	'Legs': set([
-		'LegSymbol', 'LegCFICode', 'LegMaturityMonthYear', 'LegRatioQty',
-		'LegSide', 'LegRefID',
-	]),
-	'MiscFees': set([
+	'Legs': [
+		'LegRefID', 'LegSymbol', 'LegCFICode', 'LegMaturityMonthYear',
+		'LegRatioQty', 'LegSide',
+	],
+	'MiscFees': [
 		'MiscFeeAmt', 'MiscFeeCurr', 'MiscFeeType',
-	]),
+	],
 }
 
 def nojson(k):
@@ -341,12 +341,12 @@ def tags(body, k, v):
 	common = set(v[0]).intersection(*[set(grp) for grp in v[1:]])
 	if not common:
 		raise ValueError('no common value in groups')
-	start = sorted(common, key=lambda k: WTAGS[k][0])[0]
+	start = sorted(common, key=REPEAT[k].index)[0]
 	
 	body.append(format('No' + k, len(v)))
 	for grp in v:
 		tags(body, start, grp[start])
-		for key in REPEAT[k] - set([start]):
+		for key in set(REPEAT[k]) - set([start]):
 			if key in grp:
 				tags(body, key, grp[key])
 
