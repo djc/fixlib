@@ -44,6 +44,10 @@ WENUMS = {
 		'Buy': '1',
 		'Sell': '2',
 	},
+	'LegSide': {
+		'Buy': '1',
+		'Sell': '2',
+	},
 	'OrdType': {
 		'Market': '1',
 		'Limit': '2',
@@ -150,17 +154,28 @@ WENUMS = {
 		'Partial decline of OrderQty': 5,
 	},
 	'TimeInForce': {
-		'0': 'Day',
-		'1': 'GTC',
-		'2': 'OPG',
-		'3': 'IOC',
-		'4': 'FOK',
-		'5': 'GTX',
-		'6': 'GTD',
+		'Day': '0',
+		'GTC': '1',
+		'OPG': '2',
+		'IOC': '3',
+		'FOK': '4',
+		'GTX': '5',
+		'GTD': '6',
 	},
 	'TargetStrategy': {
 		'Calendar Spread': '1000',
-	}
+	},
+	'OrdRejReason': {
+		'Broker option': 0,
+		'Unknown symbol': 1,
+		'Exchange closed': 2,
+		'Order exceeds limit': 3,
+		'Too late to enter': 4,
+		'Unknown Order': 5,
+		'Duplicate Order': 6,
+		'Duplicate of a verbally communicated order': 7,
+		'Stale Order': 8,
+	},
 }
 
 RENUMS = {}
@@ -214,6 +229,7 @@ RTAGS = {
 	99: ('StopPx', float),
 	100: ('ExDestination', str),
 	102: ('CxlRejReason', int),
+	103: ('OrdRejReason', int),
 	108: ('HeartBtInt', int),
 	109: ('ClientID', str),
 	111: ('MaxFloor', float),
