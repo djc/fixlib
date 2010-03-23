@@ -291,7 +291,12 @@ def dtencode(dt):
 	return dt.strftime(DATETIMEFMT)
 
 def dtdecode(dt):
-	return datetime.strptime(dt, DATETIMEFMT)
+	if len(dt) == 17:
+		return datetime.strptime(dt, DATETIMEFMT)
+	base, milli = dt.split('.')
+	dt = datetime.strptime(base, DATETIMEFMT)
+	dt = dt.replace(microsecond=int(milli) * 1000)
+	return dt
 
 TYPES = {
 	bool: (boolencode, booldecode),

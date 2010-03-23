@@ -120,7 +120,14 @@ class BasicTests(unittest.TestCase):
 		self.assertEquals(x['SendingTime'], '2010-03-09 12:45:43')
 		self.assertEquals(x['Legs'][0]['TransactTime'], '2010-03-09 12:45:43')
 		self.assertEquals(util.json_decode(x), msg)
-		
+	
+	def testdatetimes(self):
+		dt = fix42.dtdecode('20100323-14:23:21.123')
+		test = datetime(2010, 3, 23, 14, 23, 21, 123000)
+		self.assertEqual(dt, test)
+		dt = fix42.dtdecode('20100323-14:24:21')
+		test = datetime(2010, 3, 23, 14, 24, 21)
+		self.assertEqual(dt, test)
 	
 def suite():
 	suite = unittest.TestSuite()
