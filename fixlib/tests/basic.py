@@ -12,8 +12,8 @@ import unittest
 class BasicTests(unittest.TestCase):
 	
 	def setUp(self):
-		fix42.REPEAT['Legs'].add('MiscFees')
-		fix42.REPEAT['Legs'].add('TransactTime')
+		fix42.REPEAT['Legs'].append('MiscFees')
+		fix42.REPEAT['Legs'].append('TransactTime')
 	
 	def tearDown(self):
 		fix42.REPEAT['Legs'].remove('MiscFees')
