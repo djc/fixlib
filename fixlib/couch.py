@@ -4,22 +4,9 @@
 # This software is licensed as described in the file LICENSE,
 # which you should have received as part of this distribution.
 
-from datetime import datetime, date
-
 import fix42, util
 import couchdb
 import copy
-
-def ddecode(s):
-	return datetime.strptime(s, '%Y-%m-%d %H:%M:%S').date()
-
-def dtdecode(s):
-	return datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
-
-TYPES = {
-	date: (str, ddecode),
-	datetime: (lambda s: str(s)[:19], dtdecode),
-}
 
 class Store(object):
 	

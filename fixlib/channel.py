@@ -1,9 +1,5 @@
-from datetime import datetime, date
-from collections import deque
-
 import asyncore
-import copy
-import fix42, util
+import util
 
 try:
 	import simplejson as json
