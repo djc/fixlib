@@ -23,7 +23,12 @@ class Engine(asyncore.dispatcher):
 			fun(hook, data)
 	
 	def handle_read(self):
-		raw = self.recv(8192)
+		
+		bits = [self.recv(8192)]
+		while len(bits[-1]) == 8192:
+			bits.append(self.recv(8192))
+		
+		raw = ''.join(bits)
 		self.hook('recv', raw)
 		msgs = fix42.parse(raw)
 		for msg in msgs:
