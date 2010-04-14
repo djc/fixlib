@@ -225,6 +225,7 @@ RTAGS = {
 	75: ('TradeDate', date),
 	76: ('ExecBroker', str),
 	77: ('OpenClose', str),
+	97: ('PossResend', bool),
 	98: ('EncryptMethod', int),
 	99: ('StopPx', float),
 	100: ('ExDestination', str),
