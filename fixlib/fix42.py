@@ -219,6 +219,7 @@ RTAGS = {
 	54: ('Side', str),
 	55: ('Symbol', str),
 	56: ('TargetCompID', str),
+	57: ('TargetSubID', str),
 	58: ('Text', str),
 	59: ('TimeInForce', str),
 	60: ('TransactTime', datetime),
