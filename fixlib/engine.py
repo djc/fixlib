@@ -27,8 +27,6 @@ class Engine(asyncore.dispatcher):
 		self.hook('recv', raw)
 		msgs = fix42.parse(raw)
 		for msg in msgs:
-			type = 'admin' if msg['MsgType'] in fix42.ADMIN else 'app'
-			self.hook(type, msg)
 			self.process(msg)
 	
 	def writable(self):
@@ -91,6 +89,8 @@ class Engine(asyncore.dispatcher):
 			})
 
 	def process(self, msg):
+		type = 'admin' if msg['MsgType'] in fix42.ADMIN else 'app'
+		self.hook(type, msg)
 		if msg['MsgSeqNum'] > self.store.last[0] + 1:
 			rsp = {'MsgType': 'Resend Request', 'EndSeqNo': 0}
 			rsp['BeginSeqNo'] = self.store.last[0] + 1
