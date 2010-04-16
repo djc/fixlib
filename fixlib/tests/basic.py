@@ -115,10 +115,12 @@ class BasicTests(unittest.TestCase):
 				}
 			],
 			'SendingTime': dt,
+			'TradeDate': date(2010, 4, 15),
 		}
 		x = util.json_encode(msg)
 		self.assertEquals(x['SendingTime'], '2010-03-09 12:45:43')
 		self.assertEquals(x['Legs'][0]['TransactTime'], '2010-03-09 12:45:43')
+		self.assertEquals(x['TradeDate'], '2010-04-15')
 		self.assertEquals(util.json_decode(x), msg)
 	
 	def testdatetimes(self):
