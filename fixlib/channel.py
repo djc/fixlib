@@ -12,6 +12,7 @@ class ChannelServer(asyncore.dispatcher):
 	def __init__(self, sock, dest):
 		asyncore.dispatcher.__init__(self, sock)
 		self.dest = dest
+		dest.addchannel(self)
 	
 	def handle_accept(self):
 		client = self.accept()

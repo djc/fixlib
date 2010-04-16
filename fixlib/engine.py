@@ -8,14 +8,26 @@ from datetime import datetime
 
 import fix42
 import asyncore
+import weakref
 
 class Engine(asyncore.dispatcher):
+	
+	def __init__(self, sock):
+		asyncore.dispatcher.__init__(self, sock)
+		self.channels = []
 	
 	@property
 	def next(self):
 		return self.store.last[1] + 1
 	
+	def addchannel(self, channel):
+		self.channels.append(weakref.ref(channel))
+	
 	def handle_close(self):
+		for ref in self.channels:
+			channel = ref()
+			if channel:
+				channel.close()
 		self.close()
 	
 	def hook(self, hook, data):
@@ -113,7 +125,7 @@ class Engine(asyncore.dispatcher):
 class Initiator(Engine):
 	
 	def __init__(self, sock, store, parties):
-		asyncore.dispatcher.__init__(self, sock)
+		Engine.__init__(self, sock)
 		self.parties = parties
 		self.store = store
 		self.buffer = []
@@ -139,7 +151,7 @@ class AcceptorServer(asyncore.dispatcher):
 class Acceptor(Engine):
 	
 	def __init__(self, sock, store):
-		asyncore.dispatcher.__init__(self, sock)
+		Engine.__init__(self, sock)
 		self.store = store
 		self.buffer = []
 		self.hooks = {}
