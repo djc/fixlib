@@ -15,6 +15,7 @@ class Engine(asyncore.dispatcher):
 	def __init__(self, sock):
 		asyncore.dispatcher.__init__(self, sock)
 		self.channels = []
+		self.closed = False
 	
 	@property
 	def next(self):
@@ -24,6 +25,7 @@ class Engine(asyncore.dispatcher):
 		self.channels.append(weakref.ref(channel))
 	
 	def handle_close(self):
+		self.closed = True
 		for ref in self.channels:
 			channel = ref()
 			if channel:
