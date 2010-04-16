@@ -10,7 +10,9 @@ import fix42
 import copy
 
 def ddecode(s):
-	return datetime.strptime(s, '%Y-%m-%d %H:%M:%S').date()
+	if len(s) > 10:
+		return datetime.strptime(s, '%Y-%m-%d %H:%M:%S').date()
+	return datetime.strptime(s, '%Y-%m-%d').date()
 
 def dtdecode(s):
 	return datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
