@@ -37,6 +37,7 @@ WENUMS = {
 		'OrderCancelReplaceRequest': 'G',
 		'OrderStatusRequest': 'H',
 		'DKTrade': 'Q',
+		'QuoteRequest': 'R',
 		'Multi-Leg': 'AB',
 		'Multi-Leg Replace': 'AC',
 	},
