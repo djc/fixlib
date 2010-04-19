@@ -12,12 +12,14 @@ class ChannelServer(asyncore.dispatcher):
 	def __init__(self, sock, dest):
 		asyncore.dispatcher.__init__(self, sock)
 		self.dest = dest
-		dest.addchannel(self)
+		dest.hooks.setdefault('close', []).append(self.closehook)
 	
 	def handle_accept(self):
 		client = self.accept()
 		SideChannel(client[0], self.dest)
-
+	
+	def closehook(self, hook, data):
+		self.close()
 
 class SideChannel(asyncore.dispatcher):
 	

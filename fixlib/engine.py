@@ -8,7 +8,6 @@ from datetime import datetime
 
 import fix42
 import asyncore
-import weakref
 
 class Engine(asyncore.dispatcher):
 	
@@ -21,18 +20,12 @@ class Engine(asyncore.dispatcher):
 	def next(self):
 		return self.store.last[1] + 1
 	
-	def addchannel(self, channel):
-		self.channels.append(weakref.ref(channel))
-	
 	def handle_close(self):
 		self.closed = True
-		for ref in self.channels:
-			channel = ref()
-			if channel:
-				channel.close()
+		self.hook('close')
 		self.close()
 	
-	def hook(self, hook, data):
+	def hook(self, hook, data=None):
 		for fun in self.hooks.get(hook, []):
 			fun(hook, data)
 	
