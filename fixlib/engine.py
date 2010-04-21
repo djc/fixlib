@@ -13,7 +13,6 @@ class Engine(asyncore.dispatcher):
 	
 	def __init__(self, sock):
 		asyncore.dispatcher.__init__(self, sock)
-		self.channels = []
 		self.closed = False
 	
 	@property
