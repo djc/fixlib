@@ -56,9 +56,11 @@ class EngineTests(unittest.TestCase):
 	def loop(self, i, a, icond=None, acond=None, reset=False):
 		
 		if icond is not None:
-			i.hooks = {'app': [icond], 'admin': [icond]}
+			i.register('app', icond)
+			i.register('admin', icond)
 		if acond is not None:
-			a.hooks = {'app': [acond], 'admin': [acond]}
+			a.register('app', acond)
+			a.register('admin', acond)
 		
 		i.logon(5, None, reset)
 		asyncore.loop()

@@ -14,6 +14,10 @@ class Engine(asyncore.dispatcher):
 	def __init__(self, sock):
 		asyncore.dispatcher.__init__(self, sock)
 		self.closed = False
+		self.hooks = {}
+	
+	def register(self, type, hook):
+		self.hooks.setdefault(type, []).append(hook)
 	
 	@property
 	def next(self):
@@ -120,10 +124,9 @@ class Initiator(Engine):
 	
 	def __init__(self, sock, store, parties):
 		Engine.__init__(self, sock)
-		self.parties = parties
 		self.store = store
 		self.buffer = []
-		self.hooks = {}
+		self.parties = parties
 	
 	def logon(self, hbi, em, reset=False, login=None):
 		req = {'MsgType': 'Logon', 'HeartBtInt': hbi, 'EncryptMethod': em}
@@ -140,6 +143,9 @@ class AcceptorServer(asyncore.dispatcher):
 		self.store = store
 		self.hooks = {}
 	
+	def register(self, type, hook):
+		self.hooks.setdefault(type, []).append(hook)
+	
 	def handle_accept(self):
 		client = self.accept()
 		a = Acceptor(client[0], self.store)
@@ -151,7 +157,6 @@ class Acceptor(Engine):
 		Engine.__init__(self, sock)
 		self.store = store
 		self.buffer = []
-		self.hooks = {}
 		self.parties = None
 	
 	def process(self, msg):
