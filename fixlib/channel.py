@@ -6,21 +6,16 @@ try:
 except ImportError:
 	import json
 
-
 class ChannelServer(asyncore.dispatcher):
 	
 	def __init__(self, sock, dest):
 		asyncore.dispatcher.__init__(self, sock)
 		self.dest = dest
-		dest.register('close', self.closehook)
+		dest.register('close', lambda x, y: self.close())
 	
 	def handle_accept(self):
 		client = self.accept()
 		SideChannel(client[0], self.dest)
-	
-	def closehook(self, hook, data):
-		print 'HOOK-CLOSE'
-		self.close()
 
 class SideChannel(asyncore.dispatcher):
 	
