@@ -124,6 +124,7 @@ class Initiator(Engine):
 		self.parties = parties
 		self.store = store
 		self.buffer = []
+		self.hooks = {}
 	
 	def logon(self, hbi, em, reset=False, login=None):
 		req = {'MsgType': 'Logon', 'HeartBtInt': hbi, 'EncryptMethod': em}
