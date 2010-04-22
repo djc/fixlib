@@ -226,6 +226,8 @@ RTAGS = {
 	58: ('Text', str),
 	59: ('TimeInForce', str),
 	60: ('TransactTime', datetime),
+	62: ('TransactTime2', datetime),
+	63: ('SettlmntTyp', str),
 	64: ('FutSettDate', date),
 	75: ('TradeDate', date),
 	76: ('ExecBroker', str),
