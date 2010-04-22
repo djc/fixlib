@@ -58,6 +58,7 @@ WENUMS = {
 		'With or without': '6',
 		'Limit or better': '7',
 		'Limit with or without': '8',
+		'Previously Quoted': 'D',
 	},
 	'OpenClose': {
 		'Open': 'O',
