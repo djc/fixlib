@@ -107,6 +107,7 @@ WENUMS = {
 		'Expired': 'C',
 		'Restated': 'D',
 		'Pending Replace': 'E',
+		'Trade': 'F',
 	},
 	'CxlRejReason': {
 		'Too late to cancel': 0,
