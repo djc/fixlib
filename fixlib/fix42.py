@@ -363,6 +363,12 @@ REPEAT = {
 	'MiscFees': [
 		'MiscFeeAmt', 'MiscFeeCurr', 'MiscFeeType',
 	],
+	'PartyIDs': [
+		'PartyID', 'PartdIDSource', 'PartyRole',
+	],
+	'RelatedSym': [
+		'Symbol', 'CFICode',
+	],
 }
 
 def nojson(k):
