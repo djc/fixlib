@@ -293,8 +293,13 @@ RTAGS = {
 	264: ('MarketDepth', int),
 	265: ('MDUpdateType', int),
 	267: ('NoMDEntryTypes', int),
+	268: ('NoMDEntries', int),
 	269: ('MDEntryType', int),
+	270: ('MDEntryPx', float),
 	271: ('MDEntrySize', float),
+	272: ('MDEntryDate', date),
+	276: ('QuoteCondition', str),
+	299: ('QuoteEntryId', str),
 	371: ('RefTagID', str),
 	372: ('RefMsgType', str),
 	373: ('SessionRejectReason', str),
@@ -323,6 +328,8 @@ RTAGS = {
 	654: ('LegRefID', str),
 	658: ('QuoteRequestRejectReason', int),
 	847: ('TargetStrategy', str),
+	1026: ('MDEntrySpotRate', float),
+	1027: ('MDEntrySpotPoints', float),
 }
 
 WTAGS = dict((v[0], (k, v[1])) for (k, v) in RTAGS.iteritems())
