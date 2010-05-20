@@ -52,6 +52,10 @@ WENUMS = {
 		'Buy': '1',
 		'Sell': '2',
 	},
+	'MDEntryType': {
+		'Bid': 0,
+		'Offer': 1,
+	},
 	'OrdType': {
 		'Market': '1',
 		'Limit': '2',
