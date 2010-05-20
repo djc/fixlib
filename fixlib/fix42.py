@@ -390,6 +390,14 @@ REPEAT = {
 	'RelatedSym': [
 		'Symbol', 'CFICode',
 	],
+	'MDEntryTypes': [
+		'MDEntryType',
+	],
+	'MDEntries': [
+		'MDEntryType', 'MDEntryPx', 'Currency', 'MDEntrySize', 'MDEntryDate',
+		'QuoteCondition', 'QuoteEntryId', 'MDEntrySpotRate',
+		'MDEntrySpotPoints',
+	],
 }
 
 def nojson(k):
