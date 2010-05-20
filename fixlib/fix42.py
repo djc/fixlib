@@ -262,8 +262,8 @@ RTAGS = {
 	131: ('QuoteReqID', str),
 	132: ('BidPx', float),
 	133: ('OfferPx', float),
-	134: ('BidSize', int), #??
-	135: ('OfferSize', int), #??
+	134: ('BidSize', int),
+	135: ('OfferSize', int),
 	136: ('NoMiscFees', int),
 	137: ('MiscFeeAmt', float),
 	138: ('MiscFeeCurr', str),
