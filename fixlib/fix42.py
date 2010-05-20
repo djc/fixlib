@@ -116,6 +116,10 @@ WENUMS = {
 		'Pending Replace': 'E',
 		'Trade': 'F',
 	},
+	'SubcriptionRequestType': {
+		'Subscribe': 1,
+		'Unsubscribe': 2,
+	},
 	'CxlRejReason': {
 		'Too late to cancel': 0,
 		'Unknown order': 1,
