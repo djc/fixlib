@@ -89,8 +89,6 @@ class Engine(asyncore.dispatcher):
 				})
 				fill = None
 			
-			msg.pop('_id')
-			msg.pop('_rev')
 			msg['PossDupFlag'] = True
 			self.queue(msg)
 			cur += 1
