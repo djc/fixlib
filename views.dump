@@ -1,0 +1,27 @@
+Content-Type: multipart/mixed; boundary="==62f69e1e7833479093e28f023b483c35=="
+
+--==62f69e1e7833479093e28f023b483c35==
+Content-ID: _design/basic
+Content-Length: 882
+Content-MD5: jvwjWJ82561qis6fMdm6Wg==
+Content-Type: application/json
+ETag: "1-cedd63e113c86f3704cddf9f30e6628b"
+
+{"_rev": "1-cedd63e113c86f3704cddf9f30e6628b", "_id": "_design/basic", "language": "javascript", "filters": {"app": "function(doc, req) {\n  if (!doc.MsgType) return false;\n  if (doc.MsgType == 'HeartBeat') return false;\n  if (doc.MsgType == 'Logon') return false;\n  if (doc.MsgType == 'Logout') return false;\n  if (doc.MsgType == 'HeartBeat') return false;\n  if (doc.MsgType == 'Test Request') return false;\n  if (doc.MsgType == 'Resend Request') return false;\n  return true;\n}"}, "views": {"app": {"map": "function(doc) {\n  if (!doc.MsgType) return;\n  if (doc.MsgType == 'HeartBeat') return;\n  if (doc.MsgType == 'Logon') return;\n  if (doc.MsgType == 'Logout') return;\n  if (doc.MsgType == 'HeartBeat') return;\n  if (doc.MsgType == 'Test Request') return;\n  if (doc.MsgType == 'Resend Request') return;\n  emit([doc.TransactTime, parseInt(doc.ExecID)], doc);\n}"}}}
+--==62f69e1e7833479093e28f023b483c35==
+Content-ID: _design/seq
+Content-Length: 392
+Content-MD5: Kk/vJibr09n7J5pneV8F1Q==
+Content-Type: application/json
+ETag: "1-7fb3b62724e166d144b22cb94a352970"
+
+{"_rev": "1-7fb3b62724e166d144b22cb94a352970", "_id": "_design/seq", "language": "javascript", "views": {"in": {"map": "function(doc) {\n  if (doc.TargetCompID != 'KENTYDE_P') return;\n  emit([parseInt(doc.MsgSeqNum), doc.SendingTime], doc);\n}"}, "out": {"map": "function(doc) {\n  if (doc.SenderCompID != 'KENTYDE_P') return;\n  emit([parseInt(doc.MsgSeqNum), doc.SendingTime], doc);\n}"}}}
+--==62f69e1e7833479093e28f023b483c35==
+Content-ID: _design/time
+Content-Length: 341
+Content-MD5: R+PbLCnX7VEFsP0AAeHgSQ==
+Content-Type: application/json
+ETag: "1-2161021e74bcc961dc4f76ef2a0b9ed7"
+
+{"_rev": "1-2161021e74bcc961dc4f76ef2a0b9ed7", "_id": "_design/time", "language": "javascript", "views": {"out": {"map": "function(doc) {\n  if (doc.SenderCompID == 'KENTYDE_P') {\n    emit(doc.SendingTime, doc);\n  }\n}"}, "in": {"map": "function(doc) {\n  if (doc.TargetCompID == 'KENTYDE_P') {\n    emit(doc.SendingTime, doc);\n  }\n}"}}}
+--==62f69e1e7833479093e28f023b483c35==--
