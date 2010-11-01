@@ -434,7 +434,9 @@ def tags(body, k, v):
 	body.append(format('No' + k, len(v)))
 	for grp in v:
 		tags(body, start, grp[start])
-		for key in set(REPEAT[k]) - set([start]):
+		for key in REPEAT[k]:
+			if key == start:
+				continue
 			if key in grp:
 				tags(body, key, grp[key])
 
