@@ -14,9 +14,27 @@ handle network communication.
 Requirements
 ============
 
- - setuptools (for easy running of tests)
- - python (tested on 2.6 only so far, should run on 2.5)
- - couchdb-python (if using the CouchDB store)
+ * setuptools (for easy running of tests)
+ * python (tested on 2.7 and 2.6, should run on 2.5)
+ * couchdb-python (if using the CouchDB store)
+
+
+Changelog
+=========
+
+
+Version 1.0 (???)
+--------------------------
+
+ * Add a side channel to support other processes submitting messages.
+ * More comprehensive support for the FIX 4.2 standard.
+ * Better support for repeating groups (in particular wrt ordering).
+
+
+Version 0.5 (Feb 11, 2010)
+--------------------------
+
+ * Initial release.
 
 
 Further information
