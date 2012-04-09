@@ -66,7 +66,12 @@ class Engine(asyncore.dispatcher):
 			self.store.save('out', msg)
 		
 		self.hook('write', msg)
-		raw = fix42.construct(msg)
+		try:
+			raw = fix42.construct(msg)
+		except Exception:
+			print 'failed to construct %s' % msg
+			return
+		
 		self.hook('send', raw)
 		self.buffer.append(raw)
 	
