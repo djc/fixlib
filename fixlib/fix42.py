@@ -27,6 +27,7 @@ WENUMS = {
 		'HeartBeat': '0',
 		'Test Request': '1',
 		'Resend Request': '2',
+		'Reject': '3',
 		'Sequence Reset': '4',
 		'Logout': '5',
 		'ExecutionReport': '8',
