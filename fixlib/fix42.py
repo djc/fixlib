@@ -217,6 +217,7 @@ RTAGS = {
 	19: ('ExecRefID', str),
 	20: ('ExecTransType', str),
 	21: ('HandlInst', str),
+	22: ('IDSource', str),
 	30: ('LastMkt', str),
 	31: ('LastPx', float),
 	32: ('LastShares', float),
