@@ -34,8 +34,8 @@ class BasicTests(unittest.TestCase):
 		}
 		raw = fix42.construct(msg)
 		v = '8=FIX.4.2\x019=17\x0135=A\x0198=0\x01108=60\x0110=001\x01'
-		self.assertEquals(raw, v)
-		self.assertEquals(msg, self._parseclean(raw))
+		self.assertEqual(raw, v)
+		self.assertEqual(msg, self._parseclean(raw))
 	
 	def testtypes(self):
 		msg = {
@@ -50,8 +50,8 @@ class BasicTests(unittest.TestCase):
 		raw = fix42.construct(msg)
 		v = '8=FIX.4.2\x019=64\x0135=A\x0152=20100115-11:10:33\x0114=15.3' \
 			'\x017=3\x0143=Y\x0175=20100115\x0118=1 2 3\x0110=161\x01'
-		self.assertEquals(raw, v)
-		self.assertEquals(msg, self._parseclean(raw))
+		self.assertEqual(raw, v)
+		self.assertEqual(msg, self._parseclean(raw))
 	
 	def testgroups(self):
 		msg = {
@@ -71,8 +71,8 @@ class BasicTests(unittest.TestCase):
 		raw = fix42.construct(msg)
 		v = '8=FIX.4.2\x019=55\x0135=8\x01136=2\x01137=3.4\x01138=EUR\x01' \
 			'139=7\x01137=1.2\x01138=USD\x01139=2\x0110=107\x01'
-		self.assertEquals(raw, v)
-		self.assertEquals(msg, self._parseclean(raw))
+		self.assertEqual(raw, v)
+		self.assertEqual(msg, self._parseclean(raw))
 
 	def testnestedgroups(self):
 		msg = {
@@ -102,8 +102,8 @@ class BasicTests(unittest.TestCase):
 		v = '8=FIX.4.2\x019=86\x0135=8\x01555=2\x01654=alpha\x01136=2\x01' \
 			'137=3.4\x01138=EUR\x01139=7\x01137=1.2\x01138=USD\x01139=2\x01' \
 			'654=beta\x01600=B\x0110=240\x01'
-		self.assertEquals(raw, v)
-		self.assertEquals(msg, self._parseclean(raw))
+		self.assertEqual(raw, v)
+		self.assertEqual(msg, self._parseclean(raw))
 	
 	def testjson(self):
 		dt = datetime(2010, 3, 9, 12, 45, 43)
@@ -118,10 +118,10 @@ class BasicTests(unittest.TestCase):
 			'TradeDate': date(2010, 4, 15),
 		}
 		x = util.json_encode(msg)
-		self.assertEquals(x['SendingTime'], '2010-03-09 12:45:43')
-		self.assertEquals(x['Legs'][0]['TransactTime'], '2010-03-09 12:45:43')
-		self.assertEquals(x['TradeDate'], '2010-04-15')
-		self.assertEquals(util.json_decode(x), msg)
+		self.assertEqual(x['SendingTime'], '2010-03-09 12:45:43')
+		self.assertEqual(x['Legs'][0]['TransactTime'], '2010-03-09 12:45:43')
+		self.assertEqual(x['TradeDate'], '2010-04-15')
+		self.assertEqual(util.json_decode(x), msg)
 	
 	def testdatetimes(self):
 		dt = fix42.dtdecode('20100323-14:23:21.123')
