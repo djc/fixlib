@@ -15,7 +15,7 @@ Requirements
 ============
 
 * setuptools (for easy running of tests)
-* python (tested on 2.7 and 2.6, should run on 2.5)
+* python (tested on 2.7)
 * couchdb-python (if using the CouchDB store)
 
 
