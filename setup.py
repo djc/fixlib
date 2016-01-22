@@ -10,7 +10,7 @@
 from setuptools import setup
 import os
 
-desc = open(os.path.join(os.path.dirname(__file__), 'README')).read()
+desc = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
 setup(
 	name='fixlib',
