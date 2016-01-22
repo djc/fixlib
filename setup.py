@@ -18,9 +18,9 @@ setup(
 	description='Pythonic library for dealing with the FIX protocol',
 	long_description=desc,
 	author='Dirkjan Ochtman',
-	author_email='djc.ochtman@kentyde.com',
+	author_email='dirkjan@ochtman.nl',
 	license='BSD',
-	url='http://source.kentyde.com/fixlib',
+	url='https://github.com/djc/fixlib',
 	classifiers=[
 		'Development Status :: 4 - Beta',
 		'Intended Audience :: Financial and Insurance Industry',
