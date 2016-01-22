@@ -1,5 +1,5 @@
+from . import util
 import asyncore
-import util
 
 try:
 	import simplejson as json

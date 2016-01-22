@@ -6,8 +6,8 @@
 
 from __future__ import print_function
 from datetime import datetime
+from . import fix42
 
-import fix42
 import asyncore
 
 class Engine(asyncore.dispatcher):
