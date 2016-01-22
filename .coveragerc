@@ -1,0 +1,7 @@
+[run]
+source = fixlib
+
+[report]
+exclude_lines =
+    pragma: no cover
+    assert
