@@ -40,5 +40,7 @@ Version 0.5 (Feb 11, 2010)
 Further information
 ===================
 
-fixlib is hosted on bitbucket.org. Bugs can be reported there.
+fixlib is `hosted`_ on GitHub. Any feedback is welcome there.
 ``views.dump`` contains the design documents needed for the CouchDB store.
+
+.. _hosted: https://github.com/djc/fixlib
