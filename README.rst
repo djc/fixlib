@@ -2,6 +2,11 @@
 fixlib
 ======
 
+.. image:: https://travis-ci.org/djc/fixlib.svg?branch=master
+   :target: https://travis-ci.org/djc/fixlib
+.. image:: https://coveralls.io/repos/djc/fixlib/badge.svg?branch=master&service=github
+   :target: https://coveralls.io/github/djc/fixlib?branch=master
+
 fixlib provides a Pythonic interface to build FIX engines. FIX messages
 (currently, only version 4.2 of the protocol is supported) are converted
 to very readable Python dictionaries. An abstract store interface is used
