@@ -4,6 +4,7 @@
 # This software is licensed as described in the file LICENSE,
 # which you should have received as part of this distribution.
 
+from __future__ import print_function
 from datetime import datetime
 
 import fix42
@@ -69,7 +70,7 @@ class Engine(asyncore.dispatcher):
 		try:
 			raw = fix42.construct(msg)
 		except Exception:
-			print 'failed to construct %s' % msg
+			print('failed to construct %s' % msg)
 			return
 		
 		self.hook('send', raw)
