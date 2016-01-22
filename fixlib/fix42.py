@@ -452,7 +452,7 @@ def construct(msg):
 		if k in msg:
 			body.append(format(k, msg.pop(k)))
 	
-	for k, v in msg.iteritems():
+	for k, v in sorted(msg.iteritems()):
 		tags(body, k, v)
 	
 	body = SOH.join(body) + SOH
