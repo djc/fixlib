@@ -8,7 +8,7 @@ from __future__ import print_function
 from datetime import datetime
 from . import fix42
 
-import asyncore
+import asyncore, traceback
 
 class Engine(asyncore.dispatcher):
 	
@@ -70,7 +70,8 @@ class Engine(asyncore.dispatcher):
 		try:
 			raw = fix42.construct(msg)
 		except Exception:
-			print('failed to construct %s' % msg)
+			print('failed to construct %s:' % msg)
+			traceback.print_exc()
 			return
 		
 		self.hook('send', raw)
