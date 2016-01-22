@@ -280,7 +280,7 @@ RTAGS = {
 	151: ('LeavesQty', float),
 	167: ('SecurityType', str),
 	188: ('BidSpotRate', float),
-	189: ('BidForwardPoints', float),	
+	189: ('BidForwardPoints', float),
 	190: ('OfferSpotRate', float),
 	191: ('OfferForwardPoints', float),
 	192: ('OrderQty2', float),
@@ -509,5 +509,5 @@ def parse(msg):
 			msgs.append(cur)
 	
 	if not msgs[-1]:
-		msgs.pop(-1)	
+		msgs.pop(-1)
 	return msgs
