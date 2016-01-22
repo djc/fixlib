@@ -20,7 +20,7 @@ Requirements
 ============
 
 * setuptools (for easy running of tests)
-* python (tested on 2.7)
+* python (tested on 2.6 and 2.7)
 * couchdb-python (if using the CouchDB store)
 
 
